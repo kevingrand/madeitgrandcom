@@ -115,17 +115,6 @@
             max-width: 48rem;
         }
 
-        .brand {
-            font-size: clamp(0.65rem, 1.5vw, 0.85rem);
-            font-weight: 400;
-            letter-spacing: 0.35em;
-            text-transform: uppercase;
-            color: var(--color-text-muted);
-            margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
-            opacity: 0;
-            animation: fadeUp 1s ease-out 0.2s forwards;
-        }
-
         .message {
             font-size: clamp(1.5rem, 4.5vw, 3.25rem);
             font-weight: 400;
@@ -133,7 +122,7 @@
             letter-spacing: -0.01em;
             margin-bottom: clamp(2rem, 5vw, 3rem);
             opacity: 0;
-            animation: fadeUp 1s ease-out 0.4s forwards;
+            animation: fadeUp 1s ease-out 0.2s forwards;
         }
 
         .message em {
@@ -141,26 +130,45 @@
             color: var(--color-cream);
         }
 
-        .date-block {
+        .countdown {
             display: flex;
-            align-items: center;
-            gap: 1rem;
+            align-items: flex-end;
+            gap: clamp(1.5rem, 4vw, 3rem);
             opacity: 0;
-            animation: fadeUp 1s ease-out 0.6s forwards;
+            animation: fadeUp 1s ease-out 0.4s forwards;
         }
 
-        .date-line {
-            width: clamp(2rem, 6vw, 4rem);
-            height: 1px;
-            background: var(--color-cream);
-            opacity: 0.5;
+        .countdown-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .date {
-            font-size: clamp(0.7rem, 1.2vw, 0.8rem);
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
+        .countdown-value {
+            font-size: clamp(2rem, 6vw, 4.5rem);
+            font-weight: 400;
+            line-height: 1;
+            letter-spacing: -0.02em;
             color: var(--color-cream);
+            font-variant-numeric: tabular-nums;
+            min-width: 2ch;
+            text-align: center;
+        }
+
+        .countdown-label {
+            font-size: clamp(0.6rem, 1vw, 0.75rem);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+        }
+
+        .countdown-separator {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            color: var(--color-cream);
+            opacity: 0.3;
+            margin-bottom: clamp(1.2rem, 2vw, 1.8rem);
+            line-height: 1;
         }
 
         /* Animations */
@@ -177,9 +185,8 @@
 
         /* Reduced motion */
         @media (prefers-reduced-motion: reduce) {
-            .brand,
             .message,
-            .date-block {
+            .countdown {
                 animation: none;
                 opacity: 1;
             }
@@ -229,13 +236,29 @@
 
     <main class="page">
         <article class="content">
-            <p class="brand">Made It Grand</p>
             <h1 class="message">
                 We're crafting a new platform to <em>improve the experience</em> for our clients.
             </h1>
-            <div class="date-block">
-                <span class="date-line" role="presentation"></span>
-                <time class="date" datetime="2025-02-26">February 26th</time>
+            <div class="countdown" role="timer" aria-label="Countdown to launch">
+                <div class="countdown-unit">
+                    <span class="countdown-value" id="days">--</span>
+                    <span class="countdown-label">Days</span>
+                </div>
+                <span class="countdown-separator" aria-hidden="true">:</span>
+                <div class="countdown-unit">
+                    <span class="countdown-value" id="hours">--</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+                <span class="countdown-separator" aria-hidden="true">:</span>
+                <div class="countdown-unit">
+                    <span class="countdown-value" id="minutes">--</span>
+                    <span class="countdown-label">Min</span>
+                </div>
+                <span class="countdown-separator" aria-hidden="true">:</span>
+                <div class="countdown-unit">
+                    <span class="countdown-value" id="seconds">--</span>
+                    <span class="countdown-label">Sec</span>
+                </div>
             </div>
         </article>
     </main>
@@ -250,6 +273,45 @@
                 }
             };
             webp.src = 'data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAwA0JaQAA3AA/vuUAAA=';
+        })();
+
+        // Countdown timer
+        (function() {
+            var launchDate = new Date('2025-02-26T00:00:00').getTime();
+            var daysEl = document.getElementById('days');
+            var hoursEl = document.getElementById('hours');
+            var minutesEl = document.getElementById('minutes');
+            var secondsEl = document.getElementById('seconds');
+
+            function pad(n) {
+                return n < 10 ? '0' + n : n;
+            }
+
+            function updateCountdown() {
+                var now = new Date().getTime();
+                var distance = launchDate - now;
+
+                if (distance < 0) {
+                    daysEl.textContent = '00';
+                    hoursEl.textContent = '00';
+                    minutesEl.textContent = '00';
+                    secondsEl.textContent = '00';
+                    return;
+                }
+
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                daysEl.textContent = pad(days);
+                hoursEl.textContent = pad(hours);
+                minutesEl.textContent = pad(minutes);
+                secondsEl.textContent = pad(seconds);
+            }
+
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
         })();
     </script>
 </body>
