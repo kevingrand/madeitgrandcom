@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Made It Grand — Coming Soon</title>
+    <meta name="description" content="We're crafting a new platform to improve the experience for our clients. Check back on February 26th.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Made It Grand — Coming Soon">
+    <meta property="og:description" content="We're crafting a new platform to improve the experience for our clients.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/site_bg.webp">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="apple-touch-icon" href="assets/favicon.png">
+
+    <!-- Preload critical assets -->
+    <link rel="preload" href="assets/PPAgrandir-Regular.woff" as="font" type="font/woff" crossorigin>
+    <link rel="preload" href="assets/site_bg.webp" as="image" type="image/webp">
+
+    <style>
+        @font-face {
+            font-family: 'PP Agrandir';
+            src: url('assets/PPAgrandir-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-cream: #F5F0E8;
+            --color-slate: #2D3640;
+            --color-text: #FFFFFF;
+            --color-text-muted: rgba(255, 255, 255, 0.7);
+            --font-main: 'PP Agrandir', 'Georgia', serif;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--color-text);
+            background-color: var(--color-slate);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+        }
+
+        .page {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: clamp(2rem, 8vw, 6rem);
+            padding-bottom: clamp(3rem, 12vw, 8rem);
+        }
+
+        /* Background Layer */
+        .background {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background-image: url('assets/site_bg.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Fallback for browsers without WebP */
+        .no-webp .background {
+            background-image: url('assets/site_bg.png');
+        }
+
+        /* Subtle vignette overlay */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse at 30% 20%, transparent 0%, rgba(20, 25, 30, 0.3) 70%),
+                linear-gradient(to top, rgba(20, 25, 30, 0.5) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Grain texture for tactile warmth */
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* Content */
+        .content {
+            position: relative;
+            z-index: 2;
+            max-width: 48rem;
+        }
+
+        .brand {
+            font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+            font-weight: 400;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.2s forwards;
+        }
+
+        .message {
+            font-size: clamp(1.5rem, 4.5vw, 3.25rem);
+            font-weight: 400;
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+            margin-bottom: clamp(2rem, 5vw, 3rem);
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.4s forwards;
+        }
+
+        .message em {
+            font-style: normal;
+            color: var(--color-cream);
+        }
+
+        .date-block {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.6s forwards;
+        }
+
+        .date-line {
+            width: clamp(2rem, 6vw, 4rem);
+            height: 1px;
+            background: var(--color-cream);
+            opacity: 0.5;
+        }
+
+        .date {
+            font-size: clamp(0.7rem, 1.2vw, 0.8rem);
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--color-cream);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(1.5rem);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .brand,
+            .message,
+            .date-block {
+                animation: none;
+                opacity: 1;
+            }
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .background {
+                position: absolute;
+                background-attachment: scroll;
+            }
+
+            .overlay {
+                position: absolute;
+                background:
+                    radial-gradient(ellipse at 50% 30%, transparent 0%, rgba(20, 25, 30, 0.4) 70%),
+                    linear-gradient(to top, rgba(20, 25, 30, 0.6) 0%, transparent 60%);
+            }
+
+            .grain {
+                position: absolute;
+            }
+
+            .page {
+                justify-content: flex-end;
+            }
+        }
+
+        /* Large screens - subtle parallax effect via fixed background */
+        @media (min-width: 769px) {
+            .background {
+                background-attachment: fixed;
+            }
+        }
+
+        /* Focus states for accessibility */
+        :focus-visible {
+            outline: 2px solid var(--color-cream);
+            outline-offset: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="background" role="presentation"></div>
+    <div class="overlay" role="presentation"></div>
+    <div class="grain" role="presentation"></div>
+
+    <main class="page">
+        <article class="content">
+            <p class="brand">Made It Grand</p>
+            <h1 class="message">
+                We're crafting a new platform to <em>improve the experience</em> for our clients.
+            </h1>
+            <div class="date-block">
+                <span class="date-line" role="presentation"></span>
+                <time class="date" datetime="2025-02-26">February 26th</time>
+            </div>
+        </article>
+    </main>
+
+    <script>
+        // WebP detection for fallback
+        (function() {
+            var webp = new Image();
+            webp.onload = webp.onerror = function() {
+                if (webp.height !== 1) {
+                    document.documentElement.classList.add('no-webp');
+                }
+            };
+            webp.src = 'data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAwA0JaQAA3AA/vuUAAA=';
+        })();
+    </script>
+</body>
+</html>
